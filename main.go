@@ -1,5 +1,18 @@
 package main
 
+import (
+	"fmt"
+	"log"
+
+	// "encoding/json"
+	// "math/rand"
+	"net/http"
+	// "strconv"
+	"github.com/gorilla/mux"
+)
+
+//____________________code for server to serve static folder ___________
+
 // func formHandler(w http.ResponseWriter, r *http.Request){
 // 	if err := r.ParseForm(); err != nil {
 // 		fmt.Fprintf(w, "parse form error: %v", err)
@@ -26,7 +39,36 @@ package main
 // 	fmt.Fprintf(w, "Hello Go")
 // }
 
+// __________________________code for CRUD movie API below____________________
+
+type Movie struct {
+	ID string `json:"id"`
+	Isbn string `json:"isbn"`
+	Title string `json:"title"`
+	Director *Director `json:"director"`
+}
+type Director struct{
+	FirstName string `json:"firstName"`
+	LastName string `json:"lastName"`
+}
+
+var movie []Movie
+
 func main () {
+	// __________________________code for CRUD movie API below____________________
+
+	r := mux.NewRouter()
+	r.HandleFunc("/movies", getMovies).Methods("GET")
+	r.HandleFunc("/movies/{id}", getMovie).Methods("GET")
+	r.HandleFunc("/movies/{id}", createMovie).Methods("POST")
+	r.HandleFunc("/movies/{id}", updateMovies).Methods("PUT")
+	r.HandleFunc("movies/{id}", deleteMovies).Methods("Delete")
+
+	fmt.Printf("staring server at port 8000\n")
+	log.Fatal(http.ListenAndServe(":8000", r))
+
+
+//____________________code for server to serve static folder ___________
 	// fileServer := http.FileServer(http.Dir("./static"))
 	// http.Handle("/", fileServer)
 	// http.HandleFunc("/form", formHandler)
@@ -36,4 +78,6 @@ func main () {
 	// if err:= http.ListenAndServe(":8080", nil); err != nil {
 	// 	log.Fatal(err)
 	// }
+
+	
 }

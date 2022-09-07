@@ -52,12 +52,32 @@ type Director struct{
 	LastName string `json:"lastName"`
 }
 
-var movie []Movie
+var movies []Movie
 
 func main () {
 	// __________________________code for CRUD movie API below____________________
 
 	r := mux.NewRouter()
+
+	movies = append(movies, Movie{
+		ID: "1",
+		Isbn:"438227",
+		Title: "Movie one",
+		Director: &Director{
+			FirstName: "James",
+			LastName: "Camron",
+		},
+
+	})
+	movies = append(movies, Movie{
+		ID: "2",
+		Isbn: "438228",
+		Title: "Movie two",
+		Director: &Director{
+			FirstName: "James",
+			LastName: "Di Caprio",
+		},
+	})
 	r.HandleFunc("/movies", getMovies).Methods("GET")
 	r.HandleFunc("/movies/{id}", getMovie).Methods("GET")
 	r.HandleFunc("/movies/{id}", createMovie).Methods("POST")

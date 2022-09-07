@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	// "encoding/json"
+	"encoding/json"
 	// "math/rand"
 	"net/http"
 	// "strconv"
@@ -53,6 +53,23 @@ type Director struct{
 }
 
 var movies []Movie
+
+func getMovies(w http.ResponseWriter, r *http.Request){
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(movies)
+}
+
+func deleteMovies(w http.ResponseWriter, r *http.Request){
+	w.Header().Set("content-Type", "application/json")
+	params:= mux.Vars(r)
+	for index,item := range movies{
+		
+		if item.ID == params["id"]{
+			fmt.Println("movies[:index]",movies[:index])
+			movies = append(movies[:index], movies[index+1:]...)
+		}
+	}
+}
 
 func main () {
 	// __________________________code for CRUD movie API below____________________
